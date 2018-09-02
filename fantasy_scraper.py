@@ -131,9 +131,16 @@ players_by_name = {}
 for projection in scrape_projections():
     player = players_by_id.get(projection['id'])
     if not player:
-        player = Player(projection['id'], projection['position'], projection['player'], projection['tm'])
+        new_name = projection['player']
+        pos = len(new_name) - 1
+        if new_name[pos] == ' ' or new_name[pos] == u'\xa0':
+            new_name = new_name[:-1]
+            pos = len(new_name) - 1
+            if new_name[pos] == ' ' or new_name[pos] == u'\xa0':
+                new_name = new_name[:-1]
+        player = Player(projection['id'], projection['position'], new_name, projection['tm'])
         players_by_id[projection['id']] = player
-        players_by_name[projection['player']] = player
+        players_by_name[new_name] = player
     player.add_projection(projection)
 
 import pickle

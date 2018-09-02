@@ -1,3 +1,5 @@
+import difflib
+
 class Player:
     def __init__(self, id, position, name, team):
         self.id = id
@@ -22,6 +24,9 @@ class Player:
 
     def get_id(self):
         return self.id
+
+    def change_name(self, new_name):
+        self.name = new_name
 
 
 
@@ -190,7 +195,6 @@ class League:
 #custom functions start here:
 
     def optimize_team(self):
-        print len(self.available_players)
     	our_team = self.teams[0]
     	best_player, best_points = None, None
         for new_player in self.available_players:
@@ -235,10 +239,21 @@ class League:
             new_points = team.season_points()
             team.remove_player(new_player)
             value_by_team.append(new_points - old_points)
-    	return value_by_team    		
+    	return value_by_team
+
+    def get_players(self, player_name):
+        player_names = []
+        for players in players_by_name:
+            player_names.append(players)
+        return difflib.get_close_matches('Rodgers, Aron', player_names)    		
 		
 # populate the teams and bring them to equilibrium
 league = League(players_by_id.values())
+
+
+'''
+
+print league.get_players("Rodgers, Aarons")
 
 # player remaining with most value to us
 b_player = league.optimize_team() 
@@ -248,7 +263,18 @@ print b_player
 print league.value_of_player(b_player)
 
 # do once someone purchases a player
-print league.assign_player(b_player, 0)
+print league.assign_player(b_player, 1)
+
+# player remaining with most value to us
+c_player = league.optimize_team() 
+print c_player
+
+# do to determine value of player currently up for auction
+print league.value_of_player(c_player)
+
+# do once someone purchases a player
+print league.assign_player(c_player, 0)
+
 
 
 #league.fill_teams_greedily()
@@ -256,3 +282,4 @@ print league.assign_player(b_player, 0)
 
 # calculate the waiver wire baselines
 #baselines = league.calculate_baselines()
+'''
